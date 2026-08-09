@@ -1,50 +1,598 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <title>Baker Data Garcia</title>
-    <link rel="shortcut icon" href="./img/logo.jpg" type="image/x-icon">
-    <link rel="stylesheet" href="estilo.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Moto Sticker QR</title>
 
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://bakerdatagarcia-b93.github.io">
-    <meta property="og:title" content="Datos del Motociclista">
-    <meta property="og:description" content="Descripcion que podran leer en esta seccion cuando busques la pagina">
-    <meta property="og:image" content="https://bakerdatagarcia-b93.github.io/images/logo.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+
+  <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Work+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+  <link rel="preload" as="style"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+        onload="this.onload=null;this.rel='stylesheet'">
+  <noscript>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  </noscript>
+
+  <link rel="shortcut icon" href="./img/logo.jpg" type="image/x-icon">
+
+ <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-color: #f8fafc; --card-bg: #ffffff; --accent: #10b981;
+      --text-main: #0f172a; --text-muted: #475569; --border-light: #e2e8f0;
+      --navbar-bg: rgba(248,250,252,0.8); --status-bg: rgba(16,185,129,0.1);
+      --status-border: #10b981; --status-text: #10b981;
+      --phone-btn-bg: #e11d48; --phone-btn-hover: #be123c;
+      --shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg-color: #0f172a; --card-bg: #1e293b; --accent: #10b981;
+        --text-main: #f8fafc; --text-muted: #94a3b8; --border-light: #334155;
+        --navbar-bg: rgba(15,23,42,0.8); --shadow: 0 2px 8px rgba(0,0,0,0.3);
+      }
+    }
+
+
+    html, body {
+      min-height: 100vh;
+      background: var(--bg-color);
+      color: var(--text-main);
+      font-family: 'Work Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    .oculto { display: none !important; }
+    .pantalla { min-height: 100vh; display: flex; flex-direction: column; }
+    #p-loading { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; }
+    .loading-txt { font-size: 14px; color: var(--text-muted); }
+    .loader { width: 40px; aspect-ratio: 1; --c: linear-gradient(#1CB698 0 0); --m: radial-gradient(farthest-side, #1CB698 92%, #0000); background: var(--m) center/12px 12px, var(--c) left 50% top -20px/8px 16px, var(--c) left 50% bottom -20px/8px 16px, var(--c) top 50% left -20px/16px 8px, var(--c) top 50% right -20px/16px 8px; background-repeat: no-repeat; animation: l18-1 1.5s infinite, l18-2 1.5s infinite; }
+    @keyframes l18-1 { 30%,70% { background-position: center, left 50% top calc(50% - 8px), left 50% bottom calc(50% - 8px), top 50% left calc(50% - 8px), top 50% right calc(50% - 8px); } }
+    @keyframes l18-2 { 0%,40% { transform: rotate(0); } 60%,100% { transform: rotate(90deg); } }
+    .activacion-bg { position: fixed; inset: 0; background: radial-gradient(ellipse at 20% 50%, #e0f2ef 0%, var(--bg-color) 60%); z-index: 0; }
+    @media (prefers-color-scheme: dark) { .activacion-bg { background: radial-gradient(ellipse at 20% 50%, #1a2a3a 0%, var(--bg-color) 60%); } }
+    .activacion-contenido { position: relative; z-index: 1; max-width: 440px; margin: 0 auto; padding: 48px 24px 64px; display: flex; flex-direction: column; }
+    .activacion-logo { font-size: 40px; color: var(--accent); margin-bottom: 16px; animation: float 3s ease-in-out infinite; }
+    @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+    .activacion-badge { display: inline-block; font-family: 'Courier New', monospace; font-size: 11px; letter-spacing: .15em; color: var(--accent); border: 1px solid var(--accent); border-radius: 4px; padding: 4px 10px; margin-bottom: 20px; width: fit-content; }
+    .activacion-titulo { font-size: clamp(42px, 11vw, 68px); font-weight: 800; line-height: .95; color: var(--text-main); margin-bottom: 16px; }
+    .activacion-desc { font-size: 15px; color: var(--text-muted); line-height: 1.6; margin-bottom: 32px; }
+    .btn-primario { display: flex; align-items: center; justify-content: center; gap: 10px; background: var(--accent); color: #fff; border: none; cursor: pointer; font-size: 16px; font-weight: 700; padding: 18px 24px; border-radius: 12px; margin-bottom: 16px; width: 100%; box-shadow: 0 4px 24px rgba(16,185,129,.35); transition: transform .2s; }
+    .btn-primario:hover { transform: translateY(-2px); }
+    .activacion-nota { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-muted); justify-content: center; }
+    .activacion-nota i { color: var(--accent); }
+    .form-header { background: linear-gradient(160deg, #e0f2ef, var(--bg-color)); padding: 32px 24px 24px; border-bottom: 1px solid var(--border-light); }
+    @media (prefers-color-scheme: dark) { .form-header { background: linear-gradient(160deg, #0d3d32, var(--bg-color)); } }
+    .form-back { display: flex; align-items: center; gap: 8px; color: var(--accent); font-size: 14px; background: none; border: none; cursor: pointer; margin-bottom: 16px; padding: 0; }
+    .form-titulo { font-size: 26px; font-weight: 800; color: var(--text-main); margin-bottom: 6px; }
+    .form-subtitulo { font-size: 13px; color: var(--text-muted); }
+    .form-id-badge { display: inline-block; font-family: 'Courier New', monospace; font-size: 12px; color: var(--accent); background: rgba(16,185,129,.1); border: 1px solid rgba(16,185,129,.3); border-radius: 4px; padding: 3px 8px; margin-top: 6px; }
+    .form-body { flex: 1; padding: 24px 20px 40px; max-width: 500px; width: 100%; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+    .form-grupo { display: flex; flex-direction: column; gap: 8px; }
+    .form-label { font-size: 11px; font-family: 'Courier New', monospace; letter-spacing: .1em; color: var(--text-muted); text-transform: uppercase; display: flex; align-items: center; gap: 6px; }
+    .form-label i { color: var(--accent); }
+    .requerido { color: #e63946; }
+    .form-input, .form-select, .form-textarea { background: var(--card-bg); border: 1px solid var(--border-light); border-radius: 10px; padding: 14px 16px; color: var(--text-main); font-size: 15px; font-family: inherit; width: 100%; transition: border-color .2s, box-shadow .2s; }
+    .form-input:focus, .form-select:focus, .form-textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(16,185,129,.15); }
+    .form-input::placeholder, .form-textarea::placeholder { color: var(--border-light); }
+    .form-textarea { resize: none; height: 80px; line-height: 1.5; }
+    .form-select { color: var(--text-main); cursor: pointer; }
+    .form-select option { background: var(--card-bg); }
+    .form-row { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 12px; width: 100%; }
+    .form-row .form-grupo { min-width: 0; width: 100%; }
+    .form-row .form-input, .form-row .form-select { min-width: 0; width: 100%; box-sizing: border-box; }
+    .form-row .form-input[type="date"] { min-width: 0; width: 100%; max-width: 100%; font-size: 14px; padding: 12px 8px; -webkit-appearance: none; appearance: none; }
+    @media (max-width:420px) { .form-row { gap: 8px; } .form-row .form-input, .form-row .form-select { padding: 10px 6px; font-size: 13px; } }
+    .contacto-bloque { background: var(--card-bg); border-radius: 12px; padding: 16px; border: 1px solid var(--border-light); display: flex; flex-direction: column; gap: 12px; }
+    .contacto-bloque-titulo { font-size: 12px; font-weight: 600; color: var(--accent); display: flex; align-items: center; gap: 6px; }
+    .foto-upload-area { background: var(--card-bg); border: 2px dashed var(--border-light); border-radius: 12px; padding: 24px; text-align: center; cursor: pointer; transition: border-color .2s; position: relative; }
+    .foto-upload-area:hover { border-color: var(--accent); }
+    .foto-upload-area input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+    .foto-upload-area i { font-size: 28px; color: var(--text-muted); display: block; margin-bottom: 8px; }
+    .foto-upload-area p { font-size: 13px; color: var(--text-muted); }
+    .foto-preview { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid var(--accent); margin: 0 auto 8px; display: block; }
+    .error-msg { background: rgba(230,57,70,.1); border: 1px solid rgba(230,57,70,.3); border-radius: 8px; padding: 12px 16px; font-size: 13px; color: #e63946; display: none; align-items: center; gap: 8px; }
+    .btn-generar { display: flex; align-items: center; justify-content: center; gap: 10px; background: var(--accent); color: #fff; border: none; cursor: pointer; font-size: 16px; font-weight: 700; padding: 18px 24px; border-radius: 12px; width: 100%; box-shadow: 0 4px 24px rgba(16,185,129,.35); transition: transform .2s; }
+    .btn-generar:hover { transform: translateY(-2px); }
+    .btn-generar:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+    .exito-contenido { max-width: 440px; margin: 0 auto; padding: 48px 24px 64px; display: flex; flex-direction: column; align-items: center; text-align: center; position: relative; z-index: 1; }
+    .exito-check { width: 80px; height: 80px; border-radius: 50%; background: rgba(16,185,129,.15); border: 3px solid var(--accent); display: flex; align-items: center; justify-content: center; font-size: 36px; color: var(--accent); margin-bottom: 24px; animation: pop .5s cubic-bezier(.34,1.56,.64,1); }
+    @keyframes pop { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    .exito-titulo { font-size: 32px; font-weight: 800; margin-bottom: 12px; }
+    .exito-desc { font-size: 15px; color: var(--text-muted); line-height: 1.7; margin-bottom: 12px; }
+    .exito-id { font-family: 'Courier New', monospace; font-size: 13px; color: var(--accent); background: rgba(16,185,129,.1); border: 1px solid rgba(16,185,129,.3); border-radius: 8px; padding: 10px 16px; margin-bottom: 24px; width: 100%; text-align: center; }
+    .exito-id span { font-size: 11px; color: var(--text-muted); display: block; margin-bottom: 4px; letter-spacing: .08em; }
+    .btn-ver-perfil { display: flex; align-items: center; justify-content: center; gap: 10px; background: var(--accent); color: #fff; border: none; cursor: pointer; font-size: 16px; font-weight: 700; padding: 18px 24px; border-radius: 12px; width: 100%; box-shadow: 0 4px 24px rgba(16,185,129,.35); transition: transform .2s; margin-bottom: 16px; }
+    .btn-ver-perfil:hover { transform: translateY(-2px); }
+    .ig-cta { width: 100%; background: var(--card-bg); border: 1px solid var(--border-light); border-radius: 10px; padding: 11px 14px; display: flex; align-items: center; gap: 10px; text-decoration: none; transition: border-color .2s; }
+    .ig-cta:hover { border-color: var(--text-muted); }
+    .ig-avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 15px; flex-shrink: 0; }
+    .ig-cta-info { flex: 1; text-align: left; }
+    .ig-cta-handle { font-weight: 700; font-size: 13px; color: var(--text-main); }
+    .ig-cta-sub { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+    .ig-cta-arrow { color: var(--text-muted); font-size: 11px; }
+
+    #p-ficha { background-color: var(--bg-color); padding-bottom: 40px; }
+    .ficha-navbar { display: flex; justify-content: space-between; align-items: center; padding: 14px 20px; background: var(--navbar-bg); backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border-light); }
+    .ficha-logo { font-weight: 700; letter-spacing: -1px; font-size: 1.2rem; }
+    .ficha-logo span { color: var(--accent); }
+    .ficha-status-badge { background: var(--status-bg); color: var(--status-text); padding: 4px 12px; border-radius: 20px; font-size: .75rem; font-weight: 600; border: 1px solid var(--status-border); }
+    .ficha-container { max-width: 616px; margin: 16px auto; padding: 0 20px; }
+    .ficha-profile-header { text-align: center; margin-bottom: 24px; }
+    .avatar-wrapper img { width: 115px; height: 115px; border-radius: 50%; border: 3px solid var(--accent); padding: 4px; margin: 0 auto 12px auto; display: block; object-fit: cover; }
+    .ficha-profile-header h1 { font-size: 1.43rem; font-weight: 700; margin: 0; }
+    .ficha-subtitle { color: var(--text-muted); font-size: .86rem; text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
+    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 22px; }
+    .info-card { background: var(--card-bg); padding: 12px 15px; border-radius: 11px; display: flex; flex-direction: row; align-items: center; gap: 10px; border: 1px solid var(--border-light); box-shadow: var(--shadow); }
+    .info-card.full-width { grid-column: span 2; }
+    .info-card > i { font-size: .95rem; color: var(--accent); flex-shrink: 0; width: 16px; text-align: center; }
+    .info-card-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1; }
+    .info-card .label { font-size: .66rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; letter-spacing: .04em; white-space: nowrap; }
+    .info-card .value { font-size: .96rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .info-card.full-width .value { white-space: normal; font-size: .92rem; }
+    .emergency-section h3 { font-size: .86rem; margin-bottom: 12px; text-align: center; color: var(--text-muted); text-transform: uppercase; letter-spacing: .06em; font-weight: 600; }
+    .phone-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px; }
+    .btn-llamar { background: var(--phone-btn-bg); color: white; text-decoration: none; padding: 14px 17px; border-radius: 12px; display: flex; align-items: center; justify-content: space-between; font-weight: 600; box-shadow: 0 3px 12px rgba(225,29,72,.2); transition: background .2s, transform .15s; }
+    .btn-llamar:active { background: var(--phone-btn-hover); transform: scale(.98); }
+    .btn-llamar-info { display: flex; flex-direction: column; gap: 3px; }
+    .btn-llamar-nombre { font-size: 15px; font-weight: 700; }
+    .btn-llamar-tel { font-size: 13px; font-family: 'Courier New', monospace; opacity: .85; }
+    .btn-llamar-icono { background: rgba(255,255,255,.2); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+    .ficha-id { font-family: 'Courier New', monospace; font-size: 11px; color: var(--text-muted); text-align: center; padding: 12px; border-top: none; margin-top: 4px; }
+    .ficha-footer { padding: 5px 20px 20px; display: flex; flex-direction: column; align-items: center; gap: 4px; border-top: 1px solid var(--border-light); margin-top: 16px; }
+    .ficha-footer-legal { font-size: 11px; color: var(--text-muted); text-align: center; line-height: 1.8; }
+    .ficha-footer-legal a { color: var(--accent); text-decoration: none; font-weight: 600; }
+    .ficha-footer-legal a:hover { text-decoration: underline; }
+
+    .contenedor-header {
+      background: #1e2326;
+      position: fixed;
+      width: 100%;
+      top: 0; left: 0;
+      z-index: 99;
+    }
+    .contenedor-header header {
+      max-width: 1100px;
+      margin: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+    }
+    .contenedor-header header .logo a {
+      font-family: 'Righteous', cursive;
+      font-size: 36px;
+      color: #1CB698;
+      text-decoration: none;
+    }
+    .contenedor-header header ul { display: flex; list-style: none; }
+    .contenedor-header header nav ul li a {
+      color: #fff;
+      margin: 0 15px;
+      padding: 3px;
+      transition: color .5s;
+      text-decoration: none;
+    }
+    .contenedor-header header nav ul li a:hover { color: #1CB698; }
+    .nav-responsive {
+      background-color: #1CB698;
+      color: #fff;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      display: none;
+    }
+
+    .inicio {
+      background:
+        linear-gradient(to top, rgba(30,35,38,.8), rgba(30,35,38,1)),
+        url(img/fondo.jpg);
+      background-size: cover;
+      background-attachment: local; 
+      height: 160vh;
+      color: #fff;
+      display: flex;
+      align-items: center;
+    }
+    .inicio .contenido-banner {
+      padding: 20px;
+      background-color: rgba(30, 35, 38, 0.6);
+      max-width: 400px;
+      margin: auto;
+      text-align: center;
+      border-radius: 40px;
+      box-shadow: 0 0 10px rgba(0,0,0,.5);
+    }
+    .inicio .contenido-banner img {
+      margin-top: 40px;
+      border: 10px solid #1CB698;
+      display: block;
+      width: 80%;
+      margin: auto;
+      border-radius: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+    }
+    .inicio .contenido-banner h1 {
+      margin-top: 40px;
+      font-size: 45px;
+      font-family: 'Righteous', cursive;
+    }
+    .inicio .contenido-banner h2 { font-size: 20px; font-weight: normal; }
+    .inicio .contenido-banner h3 {
+      margin-top: 18px;
+      font-size: 22px;
+      font-family: 'Righteous', cursive;
+    }
+  </style>
+
 </head>
 <body>
-    <div class="contenedor-header">
-        <header>
-            <div class="logo">
-                <a href="#">Datos del Motociclista</a>
-            </div>
-            <div class="nav-responsive">
-                <i class="fa-solid fa-bars"></i>
-            </div>
-        </header>
-    </div>
     
-    <section id="inicio" class="inicio">
-        <div class="contenido-banner">
-            <div class="contenedor-img">
-                <img src="img/hero.jpeg" alt="">
-            </div>
-            <h1>Nombre Motociclista</h1>
-            <h3>Fecha de Nacimiento</h3>
-            <h2>XX/XX/XX</h2>
-            <h3>Alergias</h3>
-            <h2>-----</h2>
-            <h3>Tipo de Sangre</h3>
-            <h2>-----</h2>
-            <h3>Señas Particulares</h3>
-            <h2>-----</h2>
-            <h3>Numeros de emergencia</h3>
-            <h2><a href="tel:+5555555557">55XXXXXXXX</a></h2>
-            <h2><a href="tel:+5555555557">55XXXXXXXX</a></h2>
-            <h2><a href="tel:+5555555557">55XXXXXXXX</a></h2>
+<div id="p-loading" class="pantalla">
+  <i class="loader"></i>
+  <span class="loading-txt">Ten paciencia...</span>
+</div>
+
+<div id="p-bienvenida" class="pantalla oculto">
+  <div class="activacion-bg"></div>
+  <div class="activacion-contenido">
+    <div class="activacion-logo"><i class="fa-solid fa-motorcycle"></i></div>
+    <div class="activacion-badge">STICKER QR MOTO</div>
+    <h1 class="activacion-titulo">Este QR aún<br>no está activo</h1>
+    <p class="activacion-desc">Actívalo en menos de 2 minutos. Tus datos estarán disponibles de inmediato en caso de emergencia.</p>
+    <button class="btn-primario" onclick="mostrar('p-formulario')">
+      <i class="fa-solid fa-shield-halved"></i>
+      Activar mi sticker ahora
+    </button>
+    <p class="activacion-nota"><i class="fa-solid fa-lock"></i> Sin cuentas ni contraseñas. Solo visible al escanear tu QR.</p>
+  </div>
+</div>
+
+<div id="p-formulario" class="pantalla oculto">
+  <div class="form-header">
+    <button class="form-back" onclick="regresarDesdeFormulario()"><i class="fa-solid fa-arrow-left"></i> Regresar</button>
+    <h1 class="form-titulo">Datos de emergencia</h1>
+    <p class="form-subtitulo">Campos con <span style="color:#e63946">*</span> son requeridos</p>
+    <div class="form-id-badge" id="badge-id"></div>
+  </div>
+  <div class="form-body">
+    <div class="form-grupo">
+      <label class="form-label"><i class="fa-solid fa-user"></i> Nombre completo <span class="requerido">*</span></label>
+      <input id="f-nombre" class="form-input" type="text" placeholder="Ej. Juan Pérez García" autocomplete="name">
+    </div>
+    <div class="form-row">
+      <div class="form-grupo">
+        <label class="form-label"><i class="fa-solid fa-cake-candles"></i> Fecha de nacimiento <span class="requerido">*</span></label>
+        <input id="f-fecha" class="form-input" type="date">
+      </div>
+      <div class="form-grupo">
+        <label class="form-label"><i class="fa-solid fa-droplet"></i> Tipo de sangre <span class="requerido">*</span></label>
+        <select id="f-sangre" class="form-select">
+          <option value="">Seleccionar</option>
+          <option>A+</option><option>A-</option>
+          <option>B+</option><option>B-</option>
+          <option>AB+</option><option>AB-</option>
+          <option>O+</option><option>O-</option>
+          <option>No sé</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-grupo">
+      <label class="form-label"><i class="fa-solid fa-pills"></i> Alergias <span class="requerido">*</span></label>
+      <input id="f-alergias" class="form-input" type="text" placeholder="Ej. Penicilina, látex · o escribe 'Ninguna'">
+    </div>
+    <div class="form-grupo">
+      <label class="form-label"><i class="fa-solid fa-id-card"></i> Señas particulares</label>
+      <textarea id="f-senas" class="form-textarea" placeholder="Ej. Tatuaje en brazo izquierdo, cicatriz en rodilla..."></textarea>
+    </div>
+    <div class="form-grupo">
+      <label class="form-label"><i class="fa-solid fa-phone-volume"></i> Contactos de emergencia <span class="requerido">*</span></label>
+      <div class="contacto-bloque">
+        <div class="contacto-bloque-titulo"><i class="fa-solid fa-1"></i> Contacto principal</div>
+        <input id="f-c1-nombre" class="form-input" type="text" placeholder="Nombre">
+        <input id="f-c1-tel" class="form-input" type="tel" placeholder="+52 55 1234 5678" maxlength="10" minlength="10">
+      </div>
+      <div class="contacto-bloque" style="margin-top:12px">
+        <div class="contacto-bloque-titulo"><i class="fa-solid fa-2"></i> Contacto secundario</div>
+        <input id="f-c2-nombre" class="form-input" type="text" placeholder="Nombre">
+        <input id="f-c2-tel" class="form-input" type="tel" placeholder="+52 55 1234 5678" maxlength="10" minlength="10">
+      </div>
+      <div class="contacto-bloque" style="margin-top:12px">
+        <div class="contacto-bloque-titulo"><i class="fa-solid fa-3"></i> Contacto adicional (opcional)</div>
+        <input id="f-c3-nombre" class="form-input" type="text" placeholder="Nombre">
+        <input id="f-c3-tel" class="form-input" type="tel" placeholder="+52 55 1234 5678" maxlength="10" minlength="10">
+      </div>
+    </div>
+    <div class="form-grupo">
+      <label class="form-label"><i class="fa-solid fa-camera"></i> Foto (opcional)</label>
+      <div class="foto-upload-area" id="foto-area">
+        <input type="file" accept="image/*" id="f-foto" onchange="previsualizarFoto(this)">
+        <i class="fa-solid fa-image"></i>
+        <p>Toca para subir una foto tuya</p>
+        <p style="font-size:11px;margin-top:4px;color:var(--border-light)">Ayuda a identificarte en caso de accidente</p>
+      </div>
+    </div>
+    <div id="form-error" class="error-msg">
+      <i class="fa-solid fa-circle-exclamation"></i>
+      <span id="error-texto">Por favor llena todos los campos requeridos.</span>
+    </div>
+    <button id="btn-guardar" class="btn-generar" onclick="guardarPerfil()">
+      <i class="fa-solid fa-shield-halved"></i>
+      Activar mi perfil de emergencia
+    </button>
+  </div>
+</div>
+
+<div id="p-exito" class="pantalla oculto">
+  <div class="activacion-bg"></div>
+  <div class="exito-contenido">
+    <div class="exito-check"><i class="fa-solid fa-check"></i></div>
+    <h1 class="exito-titulo">¡Tu perfil está activo!</h1>
+    <p class="exito-desc">Desde ahora cualquier persona que escanee tu QR verá tu información de emergencia de inmediato.</p>
+    <div class="exito-id">
+      <span>ID DE TU STICKER</span>
+      <strong id="exito-id-valor"></strong>
+    </div>
+    <button class="btn-ver-perfil" onclick="verMiPerfil()">
+      <i class="fa-solid fa-eye"></i>
+      Ver mi ficha de emergencia
+    </button>
+    <a class="ig-cta" href="https://instagram.com/b2b.dev" target="_blank" rel="noopener">
+      <div class="ig-avatar"><i class="fa-brands fa-instagram"></i></div>
+      <div class="ig-cta-info">
+        <div class="ig-cta-handle">@b2b.dev</div>
+        <div class="ig-cta-sub">¿Necesitas actualizar tus datos? Escríbenos</div>
+      </div>
+      <i class="fa-solid fa-arrow-right ig-cta-arrow"></i>
+    </a>
+  </div>
+</div>
+
+<div id="p-ficha" class="pantalla oculto">
+  <div class="ficha-navbar">
+    <div class="ficha-logo">B<span>2</span>B</div>
+    <div class="ficha-status-badge">Ficha de Emergencia</div>
+  </div>
+  <div class="ficha-container">
+    <div class="ficha-profile-header">
+      <div class="avatar-wrapper">
+        <img id="ficha-foto" src="" alt="Foto de perfil" loading="lazy" decoding="async">
+      </div>
+      <h1 id="ficha-nombre"></h1>
+      <p class="ficha-subtitle">Motociclista</p>
+    </div>
+    <div class="info-grid">
+      <div class="info-card">
+        <i class="fa-solid fa-droplet"></i>
+        <div class="info-card-text">
+          <span class="label">Tipo de Sangre</span>
+          <span id="ficha-sangre" class="value">—</span>
         </div>
+      </div>
+      <div class="info-card">
+        <i class="fa-solid fa-calendar-day"></i>
+        <div class="info-card-text">
+          <span class="label">Nacimiento</span>
+          <span id="ficha-fecha" class="value">—</span>
+        </div>
+      </div>
+      <div class="info-card full-width">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        <div class="info-card-text">
+          <span class="label">Alergias</span>
+          <span id="ficha-alergias" class="value">—</span>
+        </div>
+      </div>
+      <div class="info-card full-width">
+        <i class="fa-solid fa-eye"></i>
+        <div class="info-card-text">
+          <span class="label">Señas Particulares</span>
+          <span id="ficha-senas" class="value">—</span>
+        </div>
+      </div>
+    </div>
+    <section class="emergency-section">
+      <h3>Contactos de Emergencia</h3>
+      <div id="ficha-contactos" class="phone-list"></div>
     </section>
+  </div>
+  <div class="ficha-footer">
+    <div class="ficha-id" id="ficha-id-label"></div>
+    <p class="ficha-footer-legal">Sticker QR de emergencia · Hecho por <a href="https://instagram.com/b2b.dev" target="_blank" rel="noopener">@b2b.dev</a></p>
+    <p class="ficha-footer-legal">¿Necesitas cambiar tus datos? <a href="https://instagram.com/b2b.dev" target="_blank" rel="noopener">Escríbenos en Instagram</a></p>
+  </div>
+</div>
+
+<!-- ✅ OPTIMIZACIÓN 11: Firebase cargado con type="module" (ya era así — perfecto, no bloquea) -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyB0fs01xzRwNPDRQ-uA5XGTQ50TtKMaiTs",
+    authDomain: "moto-sticker-qr-28c34.firebaseapp.com",
+    projectId: "moto-sticker-qr-28c34",
+    storageBucket: "moto-sticker-qr-28c34.firebasestorage.app",
+    messagingSenderId: "959074534613",
+    appId: "1:959074534613:web:38eb00f93d1f23235ace5c"
+  };
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  function obtenerID() {
+    let p = window.location.pathname.replace(/^\/|\/$/g, '');
+    if (!p) return 'default';
+    let l = p.split('/').pop();
+    let pts = l.split('-');
+    return pts[pts.length - 1].split('.')[0];
+  }
+
+  function ocultarTel(t) {
+    const l = t.replace(/\D/g, '');
+    if (l.length < 4) return t;
+    return l.slice(-10, -8) + '••••••' + l.slice(-2);
+  }
+
+  const PERFIL_ID = obtenerID();
+  document.getElementById('badge-id').textContent = 'Sticker ID: ' + PERFIL_ID;
+  window._dG = null;
+
+  window.mostrar = function(id, replaceHistory = false) {
+    if (id === 'p-formulario' && window._dG) id = 'p-ficha';
+    ['p-loading','p-bienvenida','p-formulario','p-exito','p-ficha'].forEach(p =>
+      document.getElementById(p).classList.add('oculto'));
+    document.getElementById(id).classList.remove('oculto');
+    window.scrollTo(0, 0);
+    replaceHistory
+      ? history.replaceState({ pantalla: id }, '', window.location.href)
+      : history.pushState({ pantalla: id }, '', window.location.href);
+  };
+
+  window.mostrarFicha = function(d, replaceHistory = false) {
+    window._dG = d;
+    document.getElementById('ficha-nombre').textContent = d.nombre || '—';
+    document.getElementById('ficha-sangre').textContent = d.sangre || '—';
+    document.getElementById('ficha-alergias').textContent = d.alergias || 'Ninguna';
+    document.getElementById('ficha-fecha').textContent = d.fecha || '—';
+    document.getElementById('ficha-senas').textContent = d.senas || '—';
+    document.getElementById('ficha-id-label').textContent = 'ID: ' + (d.id || '—');
+    const foto = document.getElementById('ficha-foto');
+    foto.src = d.fotoUrl || '';
+    foto.style.display = d.fotoUrl ? 'block' : 'none';
+    const contenedor = document.getElementById('ficha-contactos');
+    contenedor.innerHTML = '';
+    if (d.contactos) {
+      d.contactos.forEach(x => {
+        if (!x.telefono) return;
+        const a = document.createElement('a');
+        a.className = 'btn-llamar';
+        a.href = 'tel:' + x.telefono;
+        a.innerHTML = `<div class="btn-llamar-info"><div class="btn-llamar-nombre">${x.nombre || 'Contacto'}</div><div class="btn-llamar-tel">${ocultarTel(x.telefono)}</div></div><div class="btn-llamar-icono"><i class="fa-solid fa-phone"></i></div>`;
+        contenedor.appendChild(a);
+      });
+    }
+    mostrar('p-ficha', replaceHistory);
+  };
+
+  window.verMiPerfil = function() {
+    window._dG ? mostrarFicha(window._dG, true) : cargarPerfil();
+  };
+
+  window.regresarDesdeFormulario = function() {
+    window._dG ? mostrarFicha(window._dG, false) : mostrar('p-bienvenida', false);
+  };
+
+  async function cargarPerfil() {
+    try {
+      const snap = await getDoc(doc(db, 'perfiles', PERFIL_ID));
+      if (snap.exists()) {
+        window._dG = snap.data();
+        mostrarFicha(window._dG, true);
+      } else {
+        window._dG = null;
+        mostrar('p-bienvenida', true);
+      }
+    } catch(e) {
+      console.error(e);
+      mostrar('p-bienvenida', true);
+    }
+  }
+
+  window.guardarPerfil = async function() {
+    const nombre    = document.getElementById('f-nombre').value.trim();
+    const fecha     = document.getElementById('f-fecha').value.trim();
+    const sangre    = document.getElementById('f-sangre').value;
+    const alergias  = document.getElementById('f-alergias').value.trim();
+    const senas     = document.getElementById('f-senas').value.trim();
+    const c1n = document.getElementById('f-c1-nombre').value.trim();
+    const c1t = document.getElementById('f-c1-tel').value.trim();
+    const c2n = document.getElementById('f-c2-nombre').value.trim();
+    const c2t = document.getElementById('f-c2-tel').value.trim();
+    const c3n = document.getElementById('f-c3-nombre').value.trim();
+    const c3t = document.getElementById('f-c3-tel').value.trim();
+    const fotoFile  = document.getElementById('f-foto').files[0];
+    const errorDiv  = document.getElementById('form-error');
+    const errorText = document.getElementById('error-texto');
+    const btn       = document.getElementById('btn-guardar');
+
+    if (!nombre || !fecha || !sangre || !alergias || !c1t) {
+      errorText.textContent = 'Por favor llena todos los campos requeridos.';
+      errorDiv.style.display = 'flex';
+      return;
+    }
+    btn.disabled = true;
+    btn.innerHTML = 'Guardando...';
+
+    try {
+      let fotoUrl = '';
+      if (fotoFile) {
+        const fd = new FormData();
+        fd.append('file', fotoFile);
+        fd.append('upload_preset', 'moto_qr');
+        const res = await fetch('https://api.cloudinary.com/v1_1/deis2b9cq/image/upload', { method: 'POST', body: fd });
+        const data = await res.json();
+        if (!data.secure_url) throw new Error('Error subiendo imagen');
+        fotoUrl = data.secure_url;
+      }
+      const datos = {
+        id: PERFIL_ID, nombre, fecha, sangre, alergias, senas: senas || '',
+        telefono: c1t, fotoUrl,
+        contactos: [
+          { nombre: c1n, telefono: c1t },
+          { nombre: c2n, telefono: c2t },
+          { nombre: c3n, telefono: c3t }
+        ],
+        activadoEn: new Date().toISOString()
+      };
+      await setDoc(doc(db, 'perfiles', PERFIL_ID), datos);
+      window._dG = datos;
+
+      try {
+        const respuesta = await fetch('https://us-central1-moto-sticker-qr-28c34.cloudfunctions.net/notificarPushover', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ nombre, id: PERFIL_ID, repo: 'bakerdatagarcia-b93.github.io' })
+        });
+        console.log('Notificación Pushover:', await respuesta.json());
+      } catch (e) {
+        console.error('Error Pushover:', e);
+      }
+
+      document.getElementById('exito-id-valor').textContent = PERFIL_ID;
+      mostrar('p-exito', true);
+    } catch(e) {
+      console.error(e);
+      errorText.textContent = 'Error: ' + e.message;
+      errorDiv.style.display = 'flex';
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fa-solid fa-shield-halved"></i> Activar mi perfil de emergencia';
+    }
+  };
+
+  window.previsualizarFoto = function(input) {
+    if (!input.files || !input.files[0]) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      let preview = document.querySelector('.foto-preview');
+      if (!preview) {
+        preview = document.createElement('img');
+        preview.className = 'foto-preview';
+        document.getElementById('foto-area').appendChild(preview);
+      }
+      preview.src = e.target.result;
+    };
+    reader.readAsDataURL(input.files[0]);
+  };
+
+  cargarPerfil();
+  window.addEventListener('popstate', () => cargarPerfil());
+</script>
 </body>
 </html>
